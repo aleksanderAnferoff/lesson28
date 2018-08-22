@@ -33,6 +33,7 @@ get '/new' do
 end
 
 post '/new' do
+	#получаем переменную из пост-запросов
 	content = params[:content]
 
 	if content.length <= 0
@@ -40,15 +41,21 @@ post '/new' do
 		return erb :new
 	end
 	
+	#сохранение данных в БД
 	@db.execute 'insert into Posts (content, created_date) values (?, datetime())',[content]
 
+	#перенаправление на главную страницу
 	redirect to '/'
 end
 
 get '/details/:post_id' do
+
+	# получаем переменную из url
 	post_id = params[:post_id]
 
+	#получаем список постов (один)
 	results = @db.execute 'select * from Posts where id=?',[post_id]
+	#выбираем этот один пост в переменную @row
 	@row = results[0]
 
 	erb :details
