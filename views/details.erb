@@ -4,10 +4,16 @@
 	<br />
 	Added at <%= @row['created_date'] %>	
 	<br/>
-	 
 </p>
+
 <h4>Comments:</h4>
 
+<% @comments.each do |comment| %>
+	<p>
+		<%= comment['content'] %>
+	</p>
+<% end %>
+ 
 <p>
 	<form action="/details/<%= @row['id'] %>" method="POST" role="form" >
 		<textarea name="content" style="width: 400px" class="form-control" rows="6" placeholder="Пишем коментарий"></textarea>

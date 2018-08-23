@@ -19,7 +19,7 @@ configure do
 	@db.execute 'CREATE TABLE IF NOT EXISTS Posts 
 	(
 		id integer PRIMARY KEY AUTOINCREMENT,
-		"created_date" date,
+		created_date date,
 		content text
 	)'
 
@@ -42,6 +42,10 @@ get '/new' do
   erb :new 
 end
 
+get '/posts' do
+  erb "Hello, User"
+end
+
 post '/new' do
 	#получаем переменную из пост-запросов
 	content = params[:content]
@@ -52,12 +56,20 @@ post '/new' do
 	end
 	
 	#сохранение данных в БД
-	@db.execute 'insert into Posts (content, created_date) values (?, datetime())',[content]
+	@db.execute 'insert into Posts 
+	(
+		content,
+		created_date
+	) 
+		values 
+	(
+		?, 
+		datetime()
+	)',[content]
 
 	#перенаправление на главную страницу
 	redirect to '/'
 end
-
 
 	#вывод информации о посте
 
@@ -67,12 +79,12 @@ get '/details/:post_id' do
 	post_id = params[:post_id]
 
 	#получаем список постов (один)
-	results = @db.execute 'select * from Posts where id = ?',[post_id]
+	results = @db.execute 'select * from Posts where id = ?', [post_id]
 	#выбираем этот один пост в переменную @row
 	@row = results[0]
 
 	#выбираем коментарии для нашего поста
-	@comment = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
+	@comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
 
 	erb :details
 end
