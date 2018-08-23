@@ -42,7 +42,7 @@ get '/new' do
   erb :new 
 end
 
-get '/posts' do
+get '/main' do
   erb "Hello, User"
 end
 
@@ -50,7 +50,7 @@ post '/new' do
 	#получаем переменную из пост-запросов
 	content = params[:content]
 
-	if content.length <= 0
+	if content.length < 1
 		@error = 'Введите текст'
 		return erb :new
 	end
@@ -75,6 +75,11 @@ post '/details/:post_id' do
 	post_id = params[:post_id]
 
 	content = params[:content]
+
+	if content.length < 1
+		@error = 'Введите текст'
+		redirect to '/'
+	end
 
 	@db.execute 'insert into Comments 
 	(
