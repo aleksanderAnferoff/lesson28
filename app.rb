@@ -71,25 +71,6 @@ post '/new' do
 	redirect to '/'
 end
 
-	#вывод информации о посте
-
-get '/details/:post_id' do
-
-	# получаем переменную из url
-	post_id = params[:post_id]
-
-	#получаем список постов (один)
-	results = @db.execute 'select * from Posts where id = ?', [post_id]
-	#выбираем этот один пост в переменную @row
-	@row = results[0]
-
-	#выбираем коментарии для нашего поста
-	@comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
-
-	erb :details
-end
-
-
 post '/details/:post_id' do
 	post_id = params[:post_id]
 
@@ -112,4 +93,20 @@ post '/details/:post_id' do
 
 	#erb "You typed comment #{content} for post #{post_id}"
 
+end
+
+get '/details/:post_id' do
+
+	# получаем переменную из url
+	post_id = params[:post_id]
+
+	#получаем список постов (один)
+	results = @db.execute 'select * from Posts where id = ?', [post_id]
+	#выбираем этот один пост в переменную @row
+	@row = results[0]
+
+	#выбираем коментарии для нашего поста
+	@comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
+
+	erb :details
 end
